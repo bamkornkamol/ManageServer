@@ -29,6 +29,7 @@ public class ServerController {
     private ArrayList<Member> startMember = new ArrayList<Member>();
     private ArrayList<Member> oldMember = new ArrayList<Member>();
     private ArrayList<Member> AllMember = new ArrayList<Member>();
+    private ArrayList<Server> Myserver = new ArrayList<Server>();
 
     @GetMapping("/servers")
     public List<Server> getServers(){
@@ -42,13 +43,6 @@ public class ServerController {
         System.out.println(name);
         Server server = serverService.serverByName(name);
         return ResponseEntity.ok(server);
-    }
-
-    @GetMapping("/myserver/{userId}")
-    public List<Server> getServersByMembers(@PathVariable("userId") String userId){
-        List<Server> serversList = serverService.findByMembers(userId);
-        this.servers.setModel((ArrayList<Server>) serversList);
-        return this.servers.getModel();
     }
 
     @PostMapping("/createServer")
@@ -129,4 +123,17 @@ public class ServerController {
         }
         return ResponseEntity.ok(null);
     };
+
+    @GetMapping("/server/user/{userId}")
+    public ArrayList<Server> getServersByMembers(@PathVariable("userId") String userId){
+        List<Server> serversList = serverService.allServer();
+        for(int i =0; i < serversList.size(); i++){
+            for (int j = 0; j < serversList.get(i).getMember().size(); j++){
+                if (serversList.get(i).getMember().get(j).getId().equals(userId)){
+                    this.Myserver.add(serversList.get(i));
+                }
+            }
+        }
+        return Myserver;
+    }
 }

@@ -15,7 +15,7 @@ public interface ServerRepository extends MongoRepository<Server, String> {
     @Query( value = "{name:'?0'}")
     public Server findByName(String name);
 
-    @Query( value = "{member: {$elemMatch:  {id: '?0'}}}")
+    @Query( value = "{'member.id': '?0'}")
     public List<Server> findByMembers(String id);
 
 }
