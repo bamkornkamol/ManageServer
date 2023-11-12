@@ -40,7 +40,7 @@ public class ServerService {
         return repository.save(server);
     }
 
-    public boolean daleteServer(Server server){
+    public boolean deleteServer(Server server){
         try{
             repository.delete((server));
             return true;

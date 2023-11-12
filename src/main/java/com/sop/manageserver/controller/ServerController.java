@@ -82,5 +82,30 @@ public class ServerController {
         return "not found";
     };
 
+    @PostMapping("/updateServer/{serverId}")
+    public ResponseEntity<Server> updateServer(@PathVariable("serverId") String serverId,@RequestBody MultiValueMap<String, String> formdata){
+        Server server = serverService.findById(serverId);
+        if (server != null){
+            Map<String, String> d = formdata.toSingleValueMap();
+            this.categories = server.getCategories();
+            Server servernew =serverService.createServer(
+                    new Server(d.get("id"), d.get("name"), d.get("description"), d.get("img"), this.categories , server.getMember())
+            );
+            return ResponseEntity.ok(servernew);
+        }
+        return ResponseEntity.ok(null);
+
+    };
+
+    @PostMapping("/deleteServer/{serverId}")
+    public ResponseEntity<Boolean> deleteServer(@PathVariable("serverId") String serverId){
+        Server server = serverService.findById(serverId);
+        boolean status =serverService.deleteServer(server);
+        if (status){
+            servers.getModel().remove(server);
+        }
+        return ResponseEntity.ok(status);
+    }
+
 
 }
