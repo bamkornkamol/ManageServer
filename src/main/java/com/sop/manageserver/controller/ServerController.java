@@ -94,9 +94,11 @@ public class ServerController {
                 new Room(null, d.get("name"), d.get("type"))
         );
         Categorieslist = server.getCategories();
-        Roomlist.add(room);
+
         for (int i = 0; i < Categorieslist.size(); i++) {
             if (Categorieslist.get(i).get_id().equals(d.get("categoriesId"))) {
+                Roomlist = Categorieslist.get(i).getRoom();
+                Roomlist.add(room);
                 Categorieslist.get(i).setRoom(Roomlist);
             }
         }
