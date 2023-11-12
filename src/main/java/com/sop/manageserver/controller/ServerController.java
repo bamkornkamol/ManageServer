@@ -60,7 +60,9 @@ public class ServerController {
         Member member = memberService.createMember(
                 new Member(null,d.get("userId"), d.get("username"), null, "builder")
         );
+        startMember = new ArrayList<Member>();
         this.startMember.add(member);
+        Categorieslist = new ArrayList<Categories>();
         Server server =serverService.createServer(
                 new Server(null, d.get("name"), d.get("description"), null, Categorieslist , this.startMember)
         );
@@ -71,11 +73,13 @@ public class ServerController {
     public ResponseEntity<Server> createCategories(@RequestBody MultiValueMap<String, String> formdata, @PathVariable("serverId") String serverId){
         Map<String, String> d = formdata.toSingleValueMap();
         Server server = serverService.findById(serverId);
+        Roomlist = new ArrayList<Room>();
         Categories categories = categoriesService.createCategories(
                 new Categories(null, d.get("name"), Roomlist)
         );
-        this.categories = server.getCategories();
-        this.categories.add(categories);
+        Categorieslist = new ArrayList<Categories>();
+        Categorieslist = server.getCategories();
+        Categorieslist.add(categories);
         Server servernew =serverService.updateServer(
                 new Server(serverId, server.getName(), server.getDescription(), server.getImage(), Categorieslist , server.getMember())
         );
