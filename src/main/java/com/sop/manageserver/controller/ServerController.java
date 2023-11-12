@@ -27,6 +27,7 @@ public class ServerController {
     private ArrayList<String> categories = new ArrayList<String>();
     private ArrayList<Member> startMember = new ArrayList<Member>();
     private ArrayList<Member> oldMember = new ArrayList<Member>();
+    private ArrayList<Member> AllMember = new ArrayList<Member>();
 
     @GetMapping("/servers")
     public List<Server> getServers(){
@@ -88,7 +89,7 @@ public class ServerController {
         if (server != null){
             Map<String, String> d = formdata.toSingleValueMap();
             this.categories = server.getCategories();
-            Server servernew =serverService.createServer(
+            Server servernew =serverService.updateServer(
                     new Server(d.get("id"), d.get("name"), d.get("description"), d.get("img"), this.categories , server.getMember())
             );
             return ResponseEntity.ok(servernew);
@@ -107,5 +108,24 @@ public class ServerController {
         return ResponseEntity.ok(status);
     }
 
-
+    @PostMapping("/deleteeMember/{serverId}")
+    public ResponseEntity<Server> deleteMember(@PathVariable("serverId") String serverId,@RequestBody MultiValueMap<String, String> formdata){
+        Server server = serverService.findById(serverId);
+        if(server != null){
+            Map<String, String> d = formdata.toSingleValueMap();
+            AllMember = server.getMember();
+            for (int i = 0; i < AllMember.size(); i++) {
+                if (AllMember.get(i).getId().equals(d.get("userId"))) {
+                    AllMember.remove(i);
+                }
+            }
+            System.out.println(AllMember);
+            this.categories = server.getCategories();
+            Server servernew =serverService.updateServer(
+                    new Server(serverId, server.getName(), server.getDescription(), server.getImage(), this.categories , AllMember)
+            );
+            return ResponseEntity.ok(servernew);
+        }
+        return ResponseEntity.ok(null);
+    };
 }
