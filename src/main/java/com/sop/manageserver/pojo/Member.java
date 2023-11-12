@@ -8,13 +8,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "Server")
 public class Member {
     @Id
+    private String _id;
     private String id;
     private String username;
     private String image;
     private String role;
 
     public Member(){}
-    public Member(String id, String username, String image, String role){
+    public Member(String _id, String id, String username, String image, String role){
+        this._id = _id;
         this.id = id;
         this.username = username;
         this.image = image;

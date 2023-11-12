@@ -9,7 +9,8 @@ public class MemberService {
     @Autowired
     private MemberRepository repository;
     public Member createMember(Member member){
-        return repository.insert(member);
+        repository.insert(member);
+        return member;
     }
 
     public Member findById(String id){

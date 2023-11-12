@@ -15,10 +15,10 @@ public class Server {
     private String description;
     private String image;
     private ArrayList<String> categories;
-    private Member member;
+    private ArrayList<Member> member;
 
     public Server(){}
-    public Server(String _id, String name, String description, String image, ArrayList<String> categories, Member member){
+    public Server(String _id, String name, String description, String image, ArrayList<String> categories, ArrayList<Member> member){
         this._id = _id;
         this.name = name;
         this.description = description;

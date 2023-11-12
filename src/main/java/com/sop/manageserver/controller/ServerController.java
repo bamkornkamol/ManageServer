@@ -20,10 +20,13 @@ import java.util.Map;
 public class ServerController {
     @Autowired
     private ServerService serverService;
+    @Autowired
     private MemberService memberService;
     private Servers servers = new Servers();
     private Members members = new Members();
     private ArrayList<String> categories = new ArrayList<String>();
+    private ArrayList<Member> startMember = new ArrayList<Member>();
+    private ArrayList<Member> oldMember = new ArrayList<Member>();
 
     @GetMapping("/servers")
     public List<Server> getServers(){
@@ -39,33 +42,41 @@ public class ServerController {
         return ResponseEntity.ok(server);
     }
 
-    //แก้
-    @GetMapping("/myserver/{id}")
-    public List<Server> getServersByMembers(@PathVariable("id") int id){
-        List<Server> serversList = serverService.findByMembers(id);
+    @GetMapping("/myserver/{userId}")
+    public List<Server> getServersByMembers(@PathVariable("userId") String userId){
+        List<Server> serversList = serverService.findByMembers(userId);
         this.servers.setModel((ArrayList<Server>) serversList);
         return this.servers.getModel();
     }
 
-    //แก้
     @PostMapping("/createServer")
     public ResponseEntity<Server> createServer(@RequestBody MultiValueMap<String, String> formdata){
         Map<String, String> d = formdata.toSingleValueMap();
+//  builder member
         Member member = memberService.createMember(
-                new Member(d.get("userId"), d.get("username"), null, "builder")
+                new Member(null,d.get("userId"), d.get("username"), null, "builder")
         );
+        this.startMember.add(member);
         Server server =serverService.createServer(
-                new Server(null, d.get("name"), d.get("description"), null, this.categories , member)
+                new Server(null, d.get("name"), d.get("description"), null, this.categories , this.startMember)
         );
         return ResponseEntity.ok(server);
     }
 
-    //แก้
-    @PostMapping("/joinServer/{serverId}/{userId}")
-    public String joinServer(@PathVariable("serverId") String serverId, @PathVariable("userId") String userId){
+    @PostMapping("/joinServer/{serverId}")
+    public String joinServer(@PathVariable("serverId") String serverId, @RequestBody MultiValueMap<String, String> formdata){
         Server server = serverService.findById(serverId);
         if (server != null) {
-            return "mee";
+            Map<String, String> d = formdata.toSingleValueMap();
+            Member member = memberService.createMember(
+                    new Member(null,d.get("userId"), d.get("username"), null, "member")
+            );
+            this.oldMember = server.getMember();
+            this.oldMember.add(member);
+            Server serverNew = serverService.updateServer((
+                    new Server(serverId, server.getName(), server.getDescription(), server.getImage(), server.getCategories(), this.oldMember)
+                    ));
+            return "join success";
         }
         System.out.println(0);
         return "not found";

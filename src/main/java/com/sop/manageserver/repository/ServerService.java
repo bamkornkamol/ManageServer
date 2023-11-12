@@ -28,7 +28,7 @@ public class ServerService {
         return repository.findByName(name);
     }
 
-    public List<Server> findByMembers(int id){
+    public List<Server> findByMembers(String id){
         return repository.findByMembers(id);
     }
 
