@@ -14,11 +14,11 @@ public class Server {
     private String name;
     private String description;
     private String image;
-    private ArrayList<String> categories;
+    private ArrayList<Categories> categories;
     private ArrayList<Member> member;
 
     public Server(){}
-    public Server(String _id, String name, String description, String image, ArrayList<String> categories, ArrayList<Member> member){
+    public Server(String _id, String name, String description, String image, ArrayList<Categories> categories, ArrayList<Member> member){
         this._id = _id;
         this.name = name;
         this.description = description;
