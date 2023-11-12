@@ -30,7 +30,7 @@ public class ServerController {
     private Members members = new Members();
     private Categoriess categoriess =new Categoriess();
     private Rooms rooms = new Rooms();
-    private ArrayList<String> categories = new ArrayList<String>();
+    private ArrayList<Categories> categories = new ArrayList<Categories>();
     private ArrayList<Member> startMember = new ArrayList<Member>();
     private ArrayList<Member> oldMember = new ArrayList<Member>();
     private ArrayList<Member> AllMember = new ArrayList<Member>();
@@ -74,8 +74,8 @@ public class ServerController {
         Categories categories = categoriesService.createCategories(
                 new Categories(null, d.get("name"), Roomlist)
         );
-        Categorieslist = new ArrayList<Categories>();
-        Categorieslist.add(categories);
+        this.categories = server.getCategories();
+        this.categories.add(categories);
         Server servernew =serverService.updateServer(
                 new Server(serverId, server.getName(), server.getDescription(), server.getImage(), Categorieslist , server.getMember())
         );
