@@ -74,6 +74,7 @@ public class ServerController {
         Categories categories = categoriesService.createCategories(
                 new Categories(null, d.get("name"), Roomlist)
         );
+        Categorieslist = new ArrayList<Categories>();
         Categorieslist.add(categories);
         Server servernew =serverService.updateServer(
                 new Server(serverId, server.getName(), server.getDescription(), server.getImage(), Categorieslist , server.getMember())
